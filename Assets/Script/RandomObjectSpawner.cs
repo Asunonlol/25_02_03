@@ -13,7 +13,7 @@ public class TandomObjectSpawner : MonoBehaviour
     public Vector3 spawnAreaMax;//スポーンエリアの最大座標
     public float spawnInterval = 0.5f;//出現間隔(秒)
 
-    public Vector3 deletePosition = new Vector3(0, 0, 30);
+    public Vector3 deletePosition = new Vector3(0, 0, -30);
     public float deleteRadius = 13f;
 
     private List<Vector3> usedPositions= new List<Vector3>();//使用済み座標を保存
@@ -28,7 +28,6 @@ public class TandomObjectSpawner : MonoBehaviour
     }
     void Update()
     {
-        DestroyClones(deletePosition,deleteRadius);
 
     }
     IEnumerator SpawnObjects()
@@ -53,21 +52,11 @@ public class TandomObjectSpawner : MonoBehaviour
             GameObject clone=Instantiate(objectToSpawn, randomPosition, Quaternion.identity);
             spawnedObjects.Add(clone);
             clone.name = "Clone_" + i;
-            objectsSpawned++;
-            OnObjectSpawned?.Invoke(objectsSpawned);
             yield return new WaitForSeconds(spawnInterval);
         }
     }
-    public void DestroyClones(Vector3 position,float radius)
+    public List<GameObject> GetSpawnedObjects()
     {
-        List<GameObject> clonesToDestroy = spawnedObjects.FindAll
-            (
-            clone =>Vector3.Distance(clone.transform.position, position) < radius
-            );
-        foreach(GameObject clone in clonesToDestroy)
-        {
-            Destroy(clone);
-            spawnedObjects.Remove(clone);
-        }
+        return spawnedObjects;
     }
 }

@@ -7,17 +7,20 @@ using UnityEngine;
 public class BoxControl : MonoBehaviour
 {
     public GameObject block;
+
     Rigidbody rigidbody;
     public Vector3 Default;
     public TandomObjectSpawner spawner;
-    public event Action<int> OnObjectSpawned;
+    public int i;
+
+    private GameObject originalObject;
 
     int currentSpawnCount = 0;
     bool Use = false;
     // Start is called before the first frame update
     void Start()
     {
-       
+
         rigidbody = this.GetComponent<Rigidbody>();
         Default = block.transform.position;
     }
@@ -44,12 +47,19 @@ public class BoxControl : MonoBehaviour
     
     void Update()
     {
-            transform.position += Vector3.back * 10 * Time.deltaTime;
+            this.transform.position += Vector3.back * 10 * Time.deltaTime;
+        //if (this.transform.position.z <= -30 )
+        //{
+        //    Destroy(this.gameObject);
+        //}
 
-        if(this.transform.position.z<=-30)
+    }
+    public void RemoveClone(GameObject clone,List<GameObject> spawnedObjects)
+    {
+        if (spawnedObjects.Contains(clone))
         {
-            Destroy(this.gameObject);
+            spawnedObjects.Remove(clone);
+            Destroy(clone);
         }
-        
     }
 }
